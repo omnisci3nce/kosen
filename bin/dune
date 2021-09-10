@@ -1,0 +1,4 @@
+(executable
+ (public_name kosen)
+ (name main)
+ (libraries kosen))
