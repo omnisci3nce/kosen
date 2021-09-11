@@ -23,3 +23,6 @@ setup.log
 .merlin
 
 node_modules
+
+*.ppm
+.DS_Store
