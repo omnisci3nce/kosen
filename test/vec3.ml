@@ -33,5 +33,15 @@ let () =
       test_case "positives" `Quick test_add_positives;
       test_case "positives and negatives" `Quick test_add_pos_neg;
       test_case "negatives and negatives" `Quick test_add_negatives
-    ]
+    ];
+    "subtract", [];
+    "multiply", [];
+    "divide", [];
+    "length", [];
+    "negate", [];
+    "dot", [];
+    "cross", [];
+    "normalise", [];
+    "reflect", [];
+    "refract", []
   ]
