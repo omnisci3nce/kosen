@@ -25,3 +25,9 @@ let multiply u s = {
 }
 
 let divide u s = multiply u (1. /. s)
+
+(* Operators *)
+let (+|) = add
+let (-|) = subtract
+let ( *| ) = multiply
+let (/|) = divide
