@@ -1,2 +1,4 @@
-(test
- (name kosen))
+(tests
+ (names vec3)
+ (libraries alcotest kosen)
+)
