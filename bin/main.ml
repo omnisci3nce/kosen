@@ -18,7 +18,7 @@ let ray_color (r: Ray.t) =
   let unit_direction = Vec3.unit_vector r.direction in
   let t = 0.5 *. (unit_direction.y +. 1.0) in
   Vec3.(
-    ((create 1. 1. 1.) *| (1.0 *. t)) +| ((create 0.5 0.7 1.) *| t)
+    ((create 1. 1. 1.) *| (1.0 -. t)) +| ((create 0.5 0.7 1.0) *| t)
   )
   
 
