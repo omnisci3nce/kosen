@@ -38,6 +38,12 @@ let test_mult_pos () =
   and w = Vec3.create 9. 9. 9. in
   Alcotest.(check vec3_testable) "same" (Vec3.multiply u s) w
 
+let test_cross_product () =
+  let a = Vec3.create 3. (-3.) 1.
+  and b = Vec3.create 4. 9. 2.
+  and c = Vec3.create (-15.) (-2.) 39. in
+  Alcotest.(check vec3_testable) "same" (Vec3.cross a b) c
+
 let () =
   let open Alcotest in
   run "Vec3" [
