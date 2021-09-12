@@ -26,3 +26,5 @@ node_modules
 
 *.ppm
 .DS_Store
+
+.vscode
