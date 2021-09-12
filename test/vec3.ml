@@ -57,7 +57,7 @@ let () =
       test_case "operators order of operations" `Quick (fun _ -> Alcotest.(check bool) "" true true)
     ];
     "length", [];
-    "cross product", [];
+    "cross product", [test_case "cross" `Quick test_cross_product];
     "utils", [
       test_case "negate" `Quick (fun _ -> Alcotest.(check bool) "" true true);
       test_case "unit_vector" `Quick (fun _ -> Alcotest.(check bool) "" true true)
@@ -69,3 +69,5 @@ let () =
     "reflect", [];
     "refract", [] *)
   ]
+
+  (* Refract http://psgraphics.blogspot.com/2020/04/deugging-refraction-in-sphre.html *)
