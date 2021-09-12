@@ -11,15 +11,19 @@ let focal_length = 1.0
 
 let origin = Vec3.zero
 let horizontal = Vec3.create viewport_width 0. 0.
-let vertical = Vec3.create 0. viewport_width 0.
+let vertical = Vec3.create 0. viewport_height 0.
 let lower_left_corner = Vec3.(origin -| (horizontal /| 2.) -| (vertical /| 2.) -| (Vec3.create 0. 0. focal_length))
 
 let ray_color (r: Ray.t) =
-  let unit_direction = Vec3.unit_vector r.direction in
-  let t = 0.5 *. (unit_direction.y +. 1.0) in
-  Vec3.(
-    ((create 1. 1. 1.) *| (1.0 -. t)) +| ((create 0.5 0.7 1.0) *| t)
-  )
+  let s = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5 in
+  if Sphere.hit_sphere s r then
+    Vec3.create 1. 0. 0.
+  else
+    let unit_direction = Vec3.unit_vector r.direction in
+    let t = 0.5 *. (unit_direction.y +. 1.0) in
+    Vec3.(
+      ((create 1. 1. 1.) *| (1.0 -. t)) +| ((create 0.5 0.7 1.0) *| t)
+    )
   
 
 let () = 
@@ -36,7 +40,6 @@ let () =
           (lower_left_corner +| (horizontal *| u) +| (vertical *| v) -| origin) in
       let color = ray_color r in
       Color.write_color oc color
-      (* Printf.fprintf oc "%d %d %d\n" ir ig ib *)
     done
   done;
 

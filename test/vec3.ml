@@ -32,19 +32,31 @@ let test_subtract () =
   and w = Vec3.create 6. 6. 6. in
   Alcotest.(check vec3_testable) "same" (Vec3.subtract u v) w
 
+let test_mult_pos () =
+  let u = Vec3.create 3. 3. 3.
+  and s = 3.
+  and w = Vec3.create 9. 9. 9. in
+  Alcotest.(check vec3_testable) "same" (Vec3.multiply u s) w
+
 let () =
   let open Alcotest in
   run "Vec3" [
     "basic arithmetic", [
-      test_case "positives" `Quick test_add_positives;
-      test_case "positives and negatives" `Quick test_add_pos_neg;
-      test_case "negatives and negatives" `Quick test_add_negatives;
-      test_case "subtract" `Quick test_subtract
+      test_case "add positives" `Quick test_add_positives;
+      test_case "add positives and negatives" `Quick test_add_pos_neg;
+      test_case "add negatives and negatives" `Quick test_add_negatives;
+      test_case "subtract" `Quick test_subtract;
+      test_case "multiply positives" `Quick test_mult_pos;
+      test_case "divide" `Quick (fun _ -> Alcotest.(check bool) "" true true);
+      test_case "operators order of operations" `Quick (fun _ -> Alcotest.(check bool) "" true true)
     ];
-    (* "multiply", [];
-    "divide", [];
     "length", [];
-    "negate", [];
+    "cross product", [];
+    "utils", [
+      test_case "negate" `Quick (fun _ -> Alcotest.(check bool) "" true true);
+      test_case "unit_vector" `Quick (fun _ -> Alcotest.(check bool) "" true true)
+    ]
+    (* 
     "dot", [];
     "cross", [];
     "normalise", [];

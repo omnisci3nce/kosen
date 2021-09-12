@@ -42,3 +42,12 @@ let negate u = {
 }
 
 let unit_vector v = v /| (length v)
+
+let dot u v =
+  (u.x *. v.x) +. (u.y *. v.y) +. (u.z *. v.z)
+
+let cross u v = {
+  x = (u.y *. v.z) -. (u.z *. v.y);
+  y = (u.z *. v.x) -. (u.x *. v.z);
+  z = (u.x *. v.y) -. (u.y *. v.x)
+}
