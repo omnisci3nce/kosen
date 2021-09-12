@@ -16,7 +16,7 @@ let lower_left_corner = Vec3.(origin -| (horizontal /| 2.) -| (vertical /| 2.) -
 
 let ray_color (r: Ray.t) =
   let s = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5 in
-  let t = Sphere.hit_sphere s r in
+  let t = Sphere.hit s r in
   match t with
   | None -> let unit_direction = Vec3.unit_vector r.direction in
             let t = 0.5 *. (unit_direction.y +. 1.0) in

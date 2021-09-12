@@ -7,8 +7,14 @@ let create v r = {
   center = v;
   radius = r
 }
+
+type hit_record = {
+  point:  Vec3.t;
+  normal: Vec3.t;
+  t:      float
+}
   
-let hit s (r: Ray.t) =
+let hit s (r: Ray.t) t_min t_max =
   let open Vec3 in
   let oc = r.origin -| s.center in
   let a = Vec3.length_squared r.direction in
@@ -18,4 +24,21 @@ let hit s (r: Ray.t) =
   if discriminant < 0. then
     None
   else
-    Some (((-.half_b) -. sqrt(discriminant)) /. a)
+    let sqrtd = sqrt discriminant in
+    let root1  = -.half_b -. sqrtd /. a
+    and root2  = -.half_b +. sqrtd /. a in
+    if (root1 < t_min || t_max < root1) then
+      if (root2 < t_min || t_max < root2) then
+        None
+      else
+        Some {
+          t = root2;
+          point = Ray.at root2 r;
+          normal = ((Ray.at root2 r) -| s.center) /| s.radius
+        }
+    else
+      Some {
+        t = root1;
+        point = Ray.at root1 r;
+        normal = ((Ray.at root1 r) -| s.center) /| s.radius
+      }
