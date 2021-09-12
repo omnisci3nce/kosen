@@ -1,17 +1,42 @@
+open Kosen
+
+(* Setup *)
+let aspect_ratio = 16.0 /. 9.0
+let image_width = 400
+let image_height = Int.of_float(Float.of_int(image_width) /. aspect_ratio)
+(* Camera *)
+let viewport_height = 2.0
+let viewport_width = aspect_ratio *. viewport_height
+let focal_length = 1.0
+
+let origin = Vec3.zero
+let horizontal = Vec3.create viewport_width 0. 0.
+let vertical = Vec3.create 0. viewport_width 0.
+let lower_left_corner = Vec3.(origin -| (horizontal /| 2.) -| (vertical /| 2.) -| (Vec3.create 0. 0. focal_length))
+
+let ray_color (r: Ray.t) =
+  let unit_direction = Vec3.unit_vector r.direction in
+  let t = 0.5 *. (unit_direction.y +. 1.0) in
+  Vec3.(
+    ((create 1. 1. 1.) *| (1.0 *. t)) +| ((create 0.5 0.7 1.) *| t)
+  )
+  
+
 let () = 
-  let image_width = 256 in
-  let image_height = 256 in
   let oc = open_out "image.ppm" in
   Printf.fprintf oc "P3\n%d %d\n255\n" image_width image_height;
   for j = (image_height - 1) downto 0 do
     for i = 0 to (image_width - 1) do
-      let r =  Float.of_int(i) /. (Float.of_int(image_width) -. 1.0)
-      and g =  Float.of_int(j) /. (Float.of_int(image_height) -. 1.0)
-      and b = 0.25 in
-      let ir = Int.of_float( 255.999 *. r )
-      and ig = Int.of_float( 255.999 *. g )
-      and ib = Int.of_float( 255.999 *. b ) in
-      Printf.fprintf oc "%d %d %d\n" ir ig ib
+    let open Vec3 in
+      let u =  Float.of_int(i) /. (Float.of_int(image_width) -. 1.0)
+      and v =  Float.of_int(j) /. (Float.of_int(image_height) -. 1.0) in
+      let r =
+        Ray.create
+          origin
+          (lower_left_corner +| (horizontal *| u) +| (vertical *| v) -| origin) in
+      let color = ray_color r in
+      Color.write_color oc color
+      (* Printf.fprintf oc "%d %d %d\n" ir ig ib *)
     done
   done;
 

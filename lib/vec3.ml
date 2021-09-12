@@ -31,3 +31,14 @@ let (+|) = add
 let (-|) = subtract
 let ( *| ) = multiply
 let (/|) = divide
+
+let length_squared u = (u.x *. u.x) +. (u.y *. u.y) +. (u.z *. u.z)
+let length u = sqrt (length_squared u)
+
+let negate u = {
+  x = -.u.x;
+  y = -.u.y;
+  z = -.u.z
+}
+
+let unit_vector v = v /| (length v)

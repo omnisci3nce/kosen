@@ -26,16 +26,22 @@ let test_add_negatives () =
   and w = Vec3.create (-2.) (-2.) (-2.) in
   Alcotest.(check vec3_testable) "same" (Vec3.add u v) w
 
+let test_subtract () =
+  let u = Vec3.create 8. 8. 8.
+  and v = Vec3.create 2. 2. 2.
+  and w = Vec3.create 6. 6. 6. in
+  Alcotest.(check vec3_testable) "same" (Vec3.subtract u v) w
+
 let () =
   let open Alcotest in
   run "Vec3" [
-    "add", [
+    "basic arithmetic", [
       test_case "positives" `Quick test_add_positives;
       test_case "positives and negatives" `Quick test_add_pos_neg;
-      test_case "negatives and negatives" `Quick test_add_negatives
+      test_case "negatives and negatives" `Quick test_add_negatives;
+      test_case "subtract" `Quick test_subtract
     ];
-    "subtract", [];
-    "multiply", [];
+    (* "multiply", [];
     "divide", [];
     "length", [];
     "negate", [];
@@ -43,5 +49,5 @@ let () =
     "cross", [];
     "normalise", [];
     "reflect", [];
-    "refract", []
+    "refract", [] *)
   ]
