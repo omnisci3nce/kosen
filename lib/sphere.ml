@@ -7,8 +7,8 @@ let create v r = {
   center = v;
   radius = r
 }
-
-let hit_sphere s (r: Ray.t) =
+  
+let hit s (r: Ray.t) =
   let open Vec3 in
   let oc = r.origin -| s.center in
   let a = Vec3.length_squared r.direction in
