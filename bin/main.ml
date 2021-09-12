@@ -16,15 +16,16 @@ let lower_left_corner = Vec3.(origin -| (horizontal /| 2.) -| (vertical /| 2.) -
 
 let ray_color (r: Ray.t) =
   let s = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5 in
-  if Sphere.hit_sphere s r then
-    Vec3.create 1. 0. 0.
+  let t = Sphere.hit_sphere s r in
+  if t > 0. then
+    let n = Vec3.unit_vector (Vec3.subtract (Ray.at t r) (Vec3.create 0. 0. (-1.))) in
+    Vec3.multiply (Vec3.create (n.x +. 1.) (n.y +. 1.) (n.z +. 1.)) 0.5
   else
     let unit_direction = Vec3.unit_vector r.direction in
     let t = 0.5 *. (unit_direction.y +. 1.0) in
     Vec3.(
       ((create 1. 1. 1.) *| (1.0 -. t)) +| ((create 0.5 0.7 1.0) *| t)
     )
-  
 
 let () = 
   let oc = open_out "image.ppm" in

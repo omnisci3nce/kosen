@@ -15,4 +15,7 @@ let hit_sphere s (r: Ray.t) =
   let b = 2.0 *. (dot oc r.direction) in
   let c = (dot oc oc) -. (s.radius *. s.radius) in
   let discriminant = (b *. b) -. (4. *. a *. c) in
-  discriminant > 0.
+  if discriminant < 0. then
+    (-1.)
+  else
+    ((-.b) -. sqrt(discriminant)) /. (2. *. a)
