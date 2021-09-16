@@ -1,7 +1,7 @@
-open Kosen
-open Kosen.Defaultscene
+(* open Kosen
+open Kosen.Defaultscene *)
 
-let ray_color (r: Ray.t) =
+(* let ray_color (r: Ray.t) =
   let s = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5 in
   let t = Sphere.hit s r 0.001 999999. in
   match t with
@@ -20,4 +20,4 @@ let () =
 
   (* TODO: create domains *)
 
-  close_out oc;
+  close_out oc; *)

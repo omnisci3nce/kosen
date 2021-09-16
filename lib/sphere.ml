@@ -1,3 +1,5 @@
+open Material
+
 type t = {
   center: Vec3.t;
   radius: float
@@ -7,40 +9,36 @@ let create v r = {
   center = v;
   radius = r
 }
-
-type hit_record = {
-  point:  Vec3.t;
-  normal: Vec3.t;
-  t:      float
-}
   
-let hit s (r: Ray.t) t_min t_max =
-  let open Vec3 in
-  let oc = r.origin -| s.center in
-  let a = Vec3.length_squared r.direction in
-  let half_b = dot oc r.direction in
-  let c = (Vec3.length_squared oc) -. (s.radius *. s.radius) in
-  let discriminant = (half_b *. half_b) -. (a *. c) in
-  if discriminant < 0. then
-    None
-  else
-    let sqrtd = sqrt discriminant in
-    let root1  = -.half_b -. sqrtd /. a
-    and root2  = -.half_b +. sqrtd /. a in
-    if (root1 < t_min || t_max < root1) then
-      if (root2 < t_min || t_max < root2) then
-        None
-      else
-        Some root2
-        (* Some {
-          t = root2;
-          point = Ray.at root2 r;
-          normal = ((Ray.at root2 r) -| s.center) /| s.radius
-        } *)
+let hit (r: Ray.t) sphere = let open Vec3 in
+  let t_max = max_float
+  and t_min = 0.0001 in
+  let oc = r.origin -| sphere.center in
+  let a = length_squared r.direction
+  and half_b = dot oc r.direction
+  and c = (length_squared oc) -. (sphere.radius *. sphere.radius) in
+  let discriminant =  half_b *. half_b -. a *. c in
+
+  if discriminant > 0. then
+    let root = sqrt discriminant in
+    let t1 = ((-.half_b) -. root) /. a in
+    if t1 < t_max && t1 > t_min then
+      let t = t1 in
+      let p = Ray.at t1 r in
+      let outward_normal = (p -| sphere.center) /| sphere.radius in
+      let front_face = (dot r.direction outward_normal) < 0. in
+      let normal = if front_face then outward_normal else negate outward_normal in
+      Some {p;normal;t;front_face; }
     else
-      Some root1
-      (* Some {
-        t = root1;
-        point = Ray.at root1 r;
-        normal = ((Ray.at root1 r) -| s.center) /| s.radius
-      } *)
+      let t2 = ((-.half_b) +. root) /. a in
+      if t2 < t_max && t2 > t_min then
+        let t = t2 in
+        let p = Ray.at t2 r in
+        let outward_normal = (p -| sphere.center) /| sphere.radius in
+        let front_face = (dot r.direction outward_normal) < 0. in
+        let normal = if front_face then outward_normal else negate outward_normal in
+        Some {p;normal;t;front_face;}
+      else
+        None
+      
+  else None
