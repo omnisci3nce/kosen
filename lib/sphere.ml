@@ -31,14 +31,16 @@ let hit s (r: Ray.t) t_min t_max =
       if (root2 < t_min || t_max < root2) then
         None
       else
-        Some {
+        Some root2
+        (* Some {
           t = root2;
           point = Ray.at root2 r;
           normal = ((Ray.at root2 r) -| s.center) /| s.radius
-        }
+        } *)
     else
-      Some {
+      Some root1
+      (* Some {
         t = root1;
         point = Ray.at root1 r;
         normal = ((Ray.at root1 r) -| s.center) /| s.radius
-      }
+      } *)
