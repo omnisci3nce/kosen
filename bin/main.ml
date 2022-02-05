@@ -4,18 +4,17 @@ open Kosen.Sphere
 
 let material_ground = Material.Lambertian { albedo = Vec3.create 0.8 0.8 0.0 }
 let material_center = Material.Lambertian { albedo = Vec3.create 0.1 0.2 0.5 } 
-(* let material_left = Material.Dielectric { refraction_index = 1.5 }  *)
+let material_left = Material.Dielectric { refraction_index = 1.5 }
 let material_right = Material.Metal { albedo = Vec3.create 0.8 0.6 0.2; fuzz = 0.0}
 let sphere1 = { center = Vec3.create 0. (-100.5) (-1.); radius = 100.; material = material_ground }
 let sphere2 = { center = Vec3.create 0. 0. (-1.); radius = 0.5; material = material_center }
-(* let sphere3 = { center = Vec3.create (-1.) 0. (-1.); radius = 0.5; material = material_left } *)
+let sphere3 = { center = Vec3.create (-1.) 0. (-1.); radius = 0.5; material = material_left }
 let sphere4 = { center = Vec3.create 1. 0. (-1.); radius = 0.5; material = material_right }
-(* let sphere5 = { center = Vec3.create (-1.) 0. (-1.); radius = -0.4; material = material_left} *) 
-let world = [sphere1; sphere2; sphere4]
+let sphere5 = { center = Vec3.create (-1.) 0. (-1.); radius = -0.4; material = material_left}
+let world = [sphere1; sphere2; sphere3; sphere4; sphere5]
 
 let rec world_hit t_min t_max (r: Ray.t) = function
   | [] -> None
-  (* | h::[] -> hit_sphere h r t_min t_max *)
   | h::t -> begin
     match Sphere.hit r h with
     | None -> world_hit t_min t_max r t
