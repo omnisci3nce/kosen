@@ -69,6 +69,9 @@ let elem_wise_product u v = {
   z = u.z *. v.z
 }
 
+let random_vec () =
+  create (Random.float 1.) (Random.float 1.) (Random.float 1.)
+
 let random_unit_vector () =
   let open Base.Float in
   let a = Base.Random.float_range (0.) (2. *. pi)
