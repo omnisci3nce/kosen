@@ -2,6 +2,7 @@
 let aspect_ratio = 16.0 /. 9.0
 let image_width = 400
 let image_height = Int.of_float(Float.of_int(image_width) /. aspect_ratio)
+
 (* Camera *)
 let viewport_height = 2.0
 let viewport_width = aspect_ratio *. viewport_height

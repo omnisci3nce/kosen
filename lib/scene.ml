@@ -1,4 +1,4 @@
-type t = Sphere.t list
+(*type t = Sphere.t list
 
 let empty : t = []
 
@@ -8,3 +8,5 @@ let hit (r: Ray.t) (s: t) : Material.hit_record =
   s
   (* |> List.map (Sphere.hit r) *)
   (* |> List. *)
+
+*)
