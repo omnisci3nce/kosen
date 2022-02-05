@@ -2,8 +2,9 @@ open Sphere
 open Utils
 
 (* Setup *)
-let aspect_ratio = 16.0 /. 9.0
-let image_width = 400
+(* let aspect_ratio = 16.0 /. 9.0 *)
+let aspect_ratio = 1.5
+let image_width = 1200
 let image_height = Int.of_float(Float.of_int(image_width) /. aspect_ratio)
 
 let lookfrom = Vec3.create 13. 2. 3.

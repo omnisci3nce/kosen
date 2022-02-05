@@ -5,7 +5,7 @@ open Kosen.Raytracer
 open Domainslib
 
 let () =
-  let samples_per_pixel = 100 in
+  let samples_per_pixel = 10 in
   let pool = Task.setup_pool ~num_additional_domains:5 () in
   let oc = open_out "image.ppm" in
   Printf.fprintf oc "P3\n%d %d\n255\n" image_width image_height;
