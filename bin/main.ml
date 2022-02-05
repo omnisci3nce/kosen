@@ -1,10 +1,17 @@
 open Kosen
 open Kosen.Defaultscene
+open Kosen.Sphere
 
-
-let ground = Sphere.create (Vec3.create 0. (-100.5) (-1.)) 100.
-let sphere1 = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5
-let world = [ground; sphere1]
+let material_ground = Material.Lambertian { albedo = Vec3.create 0.8 0.8 0.0 }
+let material_center = Material.Lambertian { albedo = Vec3.create 0.1 0.2 0.5 } 
+(* let material_left = Material.Dielectric { refraction_index = 1.5 }  *)
+let material_right = Material.Metal { albedo = Vec3.create 0.8 0.6 0.2; fuzz = 0.0}
+let sphere1 = { center = Vec3.create 0. (-100.5) (-1.); radius = 100.; material = material_ground }
+let sphere2 = { center = Vec3.create 0. 0. (-1.); radius = 0.5; material = material_center }
+(* let sphere3 = { center = Vec3.create (-1.) 0. (-1.); radius = 0.5; material = material_left } *)
+let sphere4 = { center = Vec3.create 1. 0. (-1.); radius = 0.5; material = material_right }
+(* let sphere5 = { center = Vec3.create (-1.) 0. (-1.); radius = -0.4; material = material_left} *) 
+let world = [sphere1; sphere2; sphere4]
 
 let rec world_hit t_min t_max (r: Ray.t) = function
   | [] -> None
@@ -30,10 +37,12 @@ let ray_color (r: Ray.t) world =
       let t = 0.5 *. (unit_direction.y +. 1.0) in
       Vec3.(((create 1. 1. 1.) *| (1.0 -. t)) +| ((create 0.5 0.7 1.0) *| t))
 
-    | Some hitrec ->
-        let target = Vec3.(hitrec.p +| hitrec.normal +| (Vec3.random_in_unit_sphere ())) in
-        let new_ray = Ray.create hitrec.p (Vec3.subtract target hitrec.p) in
-        Vec3.( (_ray_color new_ray world (depth+1)) *| 0.5 ) in
+    | Some hitrec -> begin
+        match Material.scatter r hitrec hitrec.material with
+          | Some { scattered; attenuation } ->
+              Vec3.elem_wise_product attenuation (_ray_color scattered world (depth+1))
+          | None -> Vec3.zero
+        end in
   _ray_color r world 0
 
 let rec range a b =

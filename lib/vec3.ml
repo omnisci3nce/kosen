@@ -69,6 +69,13 @@ let elem_wise_product u v = {
   z = u.z *. v.z
 }
 
+let random_unit_vector () =
+  let open Base.Float in
+  let a = Base.Random.float_range (0.) (2. *. pi)
+  and z = Base.Random.float_range (-1.) 1. in
+  let r = sqrt (1. -. z *. z) in
+  create (r *. (cos a)) (r *. (sin a)) z
+
 let rec random_in_unit_sphere () =
   let p = create (Base.Random.float_range (-1.) 1.) (Base.Random.float_range (-1.) 1.) 0. in
   if length_squared p >= 1. then

@@ -1,16 +1,16 @@
-open Material
-
 type t = {
   center: Vec3.t;
-  radius: float
+  radius: float;
+  material: Material.t
 }
 
-let create v r = {
+let create v r m = {
   center = v;
-  radius = r
+  radius = r;
+  material = m
 }
   
-let hit (r: Ray.t) sphere = let open Vec3 in
+let hit (r: Ray.t) sphere = let open Vec3 in let open Material in
   let t_max = max_float
   and t_min = 0.0001 in
   let oc = r.origin -| sphere.center in
@@ -28,7 +28,7 @@ let hit (r: Ray.t) sphere = let open Vec3 in
       let outward_normal = (p -| sphere.center) /| sphere.radius in
       let front_face = (dot r.direction outward_normal) < 0. in
       let normal = if front_face then outward_normal else negate outward_normal in
-      Some {p;normal;t;front_face; }
+      Some {p;normal;t;front_face; material = sphere.material}
     else
       let t2 = ((-.half_b) +. root) /. a in
       if t2 < t_max && t2 > t_min then
@@ -37,7 +37,7 @@ let hit (r: Ray.t) sphere = let open Vec3 in
         let outward_normal = (p -| sphere.center) /| sphere.radius in
         let front_face = (dot r.direction outward_normal) < 0. in
         let normal = if front_face then outward_normal else negate outward_normal in
-        Some {p;normal;t;front_face;}
+        Some {p;normal;t;front_face; material = sphere.material}
       else
         None
       
