@@ -68,3 +68,10 @@ let elem_wise_product u v = {
   y = u.y *. v.y;
   z = u.z *. v.z
 }
+
+let rec random_in_unit_sphere () =
+  let p = create (Base.Random.float_range (-1.) 1.) (Base.Random.float_range (-1.) 1.) 0. in
+  if length_squared p >= 1. then
+    random_in_unit_sphere ()
+  else
+    p
