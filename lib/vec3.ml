@@ -51,3 +51,20 @@ let cross u v = {
   y = (u.z *. v.x) -. (u.x *. v.z);
   z = (u.x *. v.y) -. (u.y *. v.x)
 }
+
+let normalise u = u /| (length u)
+
+let reflect u n = 
+  u -| n *| ((dot u n) *. 2.)
+
+let refract uv n etai_over_etat =
+  let cos_theta = dot (negate uv) n in
+  let r_out_perp = (uv +| n *| cos_theta) *| etai_over_etat in
+  let r_out_parallel = n *| -.(sqrt (abs_float ( 1.0 -. length_squared (r_out_perp) ))) in
+  r_out_perp +| r_out_parallel
+
+let elem_wise_product u v = {
+  x = u.x *. v.x;
+  y = u.y *. v.y;
+  z = u.z *. v.z
+}

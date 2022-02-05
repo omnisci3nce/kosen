@@ -2,7 +2,6 @@ open Kosen
 open Kosen.Defaultscene
 
 
-
 let ground = Sphere.create (Vec3.create 0. (-100.5) (-1.)) 100.
 let sphere1 = Sphere.create (Vec3.create 0. 0. (-1.)) 0.5
 let world = [ground; sphere1]
@@ -29,25 +28,30 @@ let ray_color (r: Ray.t) world =
   | Some hitrec ->
       Vec3.( (hitrec.normal +| (Vec3.create 1. 1. 1.)) *| 0.5 )
 
-let () = 
+let rec range a b =
+  if a > b then []
+  else a :: range (a + 1) b
+
+let () =
+  let cam = Camera.create in
+  let samples_per_pixel = 10 in
   let oc = open_out "image.ppm" in
   Printf.fprintf oc "P3\n%d %d\n255\n" image_width image_height;
 
   (* Iterate through every pixel in row, for each row *)
   for j = (image_height - 1) downto 0 do
-    Printf.printf "Scanlines remaining: %d\n" j;
+    Printf.printf "Scanlines remaining: %d\n" j; flush stdout;
     for i = 0 to (image_width - 1) do
-    let open Vec3 in
-    
-      let u =  Float.of_int(i) /. (Float.of_int(image_width) -. 1.0)
-      and v =  Float.of_int(j) /. (Float.of_int(image_height) -. 1.0) in
-      let r =
-        Ray.create
-          origin
-          (lower_left_corner +| (horizontal *| u) +| (vertical *| v) -| origin) in
 
-      let color = ray_color r world in
-      Color.write_color oc color
+      let color_total =
+        List.fold_left (fun (acc: Vec3.t) _ -> 
+          let u = (Float.of_int(i) +. Random.float(1.)) /. Float.of_int(image_width)
+          and v = (Float.of_int(j) +. Random.float(1.)) /. Float.of_int(image_height) in
+          let r = cam |> Camera.get_ray u v in
+          Vec3.add (ray_color (r: Ray.t) world) acc
+        ) (Vec3.create 0. 0. 0.) (range 0 (samples_per_pixel - 1)) in
+   
+      Color.write_color oc color_total (Float.of_int samples_per_pixel)
     done
   done;
 
